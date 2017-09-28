@@ -56,10 +56,8 @@ function step2() {
   var promisesArray = [];
   var corsUrl = formattedUrl2.substr(0, formattedUrl.length - 1);
   promisesArray.push(addCorsToCouch(corsUrl));
-  promisesArray.push(addUserRoles(formattedUrl));
+  promisesArray.push(addUserRoles(formattedUrl2));
   promisesArray.push(updateConfigParams(formattedUrl));
-  promisesArray.push(updateConfig(formattedUrl2 + '_users'));
-  promisesArray.push(updateConfig(formattedUrl2 + '_replicator'));
 
   return Promise.all(promisesArray);
 }
@@ -91,15 +89,23 @@ function updateConfig(path, reqData) {
 }
 
 function createAdminUser(_url) {
-  var path = _url + '/_config/admins/' + auth.u;
+  var path = _url + '_config/admins/' + auth.u;
   var password = JSON.stringify(auth.p);
 
   return updateConfig(path, password);
 }
 
 function addUserRoles(url) {
-  var path = url + '_users/_security';
-  return updateConfig(path, securityDoc);
+  var userPromisesArray = [];
+  userPromisesArray.push(updateConfig(url + '_users'));
+  userPromisesArray.push(updateConfig(url + '_replicator'));
+  return Promise.all(userPromisesArray).then(function () {
+    var path = url + '_users/_security';
+    return updateConfig(path, securityDoc);
+  }).catch(function () {
+    var path = url + '_users/_security';
+    return updateConfig(path, securityDoc);
+  });
 }
 
 function updateConfigParams(url) {
