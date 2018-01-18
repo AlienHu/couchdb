@@ -130,6 +130,8 @@ function updateConfigParams(_url, bCouch2) {
   let path5 = _url + '_config/couchdb/delayed_commits';
   // let path6 = _url + '_config/couchdb/database_dir';
   let path7 = _url + '_config/logal/level';
+  let path8 = _url + '_config/couch_httpd_auth/require_valid_user';
+  let path9 = _url + '_config/chttpd/require_valid_user';
 
   //updateConfig exception is not throw .. just console message
   await updateConfig(path1, authHandlerDoc);
@@ -144,4 +146,7 @@ function updateConfigParams(_url, bCouch2) {
   // if (bCouch2) {
   //   dbPath = '"../data"';
   // }
+  // await updateConfig(path6, dbPath);
+  await updateConfig(path8, '"true"');
+  await updateConfig(path9, '"true"');
 }
