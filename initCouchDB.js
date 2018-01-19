@@ -5,7 +5,6 @@ const fetch = require('node-fetch');
 const urlHelper = require('url');
 
 const addCorsToCouch = require('add-cors-to-couchdb');
-
 let yargs = require('yargs')
   .alias('p', 'password')
   .describe('p', 'admin password')
@@ -24,7 +23,7 @@ if (argv.h) {
 }
 
 let url2 = 'http://127.0.0.1:5984';
-let url = url2 + '/_node/couchdb@localhost/';
+let url = url2 + '/_node/couchdb@127.0.0.1/';
 let auth = {
   u: 'couchadmin',
   p: 'test'
@@ -121,7 +120,7 @@ async function addUserRoles(_url, bCouch2) {
   await updateConfig(path, securityDoc, true);
 }
 
-function updateConfigParams(_url, bCouch2) {
+async function updateConfigParams(_url, bCouch2) {
 
   let path1 = _url + '_config/http/authentication_handlers/';
   let path2 = _url + '_config/couch_httpd_oauth/use_users_db';
