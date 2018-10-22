@@ -21,7 +21,7 @@ const I_PING_FAIL_WAIT_TIME = 1000; //1 SECOND
 
 const checkCouchDBIsAlive = async (iFailCount) => {
 
-    shelljs.exec(STR_PING_COUCHDB_CMD);
+    shelljs.exec(STR_PING_COUCHDB_CMD, {silent:true});
     let resp = fs.readFileSync('ping.log');
     resp = resp.toString();
     if (resp.indexOf(STR_SUCCESS_RESP) !== -1) {
@@ -55,9 +55,9 @@ const monitor = async () => {
 };
 
 const startCouchDB = async () => {
-    shelljs.exec(STR_STOP_COUCHDB_CMD);
+    shelljs.exec(STR_STOP_COUCHDB_CMD,{silent:true});
     await pgTimeOut(I_PING_FAIL_WAIT_TIME);
-    shelljs.exec(STR_START_COUCHDB_CMD);
+    shelljs.exec(STR_START_COUCHDB_CMD,{silent:true});
 
     log('restarted couchdb');
 
